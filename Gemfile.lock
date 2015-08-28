@@ -317,8 +317,6 @@ GEM
     tins (1.6.0)
     turbolinks (2.5.3)
       coffee-rails
-    turbolinks_transitions (0.0.5)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -383,7 +381,6 @@ DEPENDENCIES
   slack-notifier
   spring
   turbolinks
-  turbolinks_transitions
   tzinfo-data
   uglifier (~> 2.0)
   unicorn
