@@ -64,12 +64,11 @@ class ProductsController < Frontend::CommonController
       attributes[:id] = params[:id] unless params[:id].blank?
 
       @product = Product.find_by(attributes)
-      unless @product.nil?
-        @category = @product.categories.first if @product.categories.any?
-        @product.replace_keys_features
+      fail ActiveRecord::RecordNotFound if @product.nil?
 
-        add_show_action_name(@product)
-      end
+      @category = @product.categories.first if @product.categories.any?
+      @product.replace_keys_features
+      add_show_action_name(@product)
     end
   end
 end

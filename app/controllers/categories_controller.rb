@@ -61,17 +61,16 @@ class CategoriesController < Frontend::CommonController
     @category = nil
 
     if !params[:slug].blank? || !params[:id].blank?
+
       attributes = {enabled: true}
       attributes[:slug] = params[:slug] unless params[:slug].blank?
       attributes[:id] = params[:id] unless params[:id].blank?
 
       @category = Category.find_by(attributes)
-
-      unless @category.nil?
-        @variables ||= {}
-        @variables['tags_group'] = TagsGroup.general_groups(@category.id)
-        add_show_action_name(@category)
-      end
+      fail ActiveRecord::RecordNotFound if @category.nil?
+      @variables ||= {}
+      @variables['tags_group'] = TagsGroup.general_groups(@category.id)
+      add_show_action_name(@category)
     end
   end
 end

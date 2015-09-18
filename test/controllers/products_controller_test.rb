@@ -38,4 +38,16 @@ class ProductsControllerTest < ActionController::TestCase
     get :add_to_shopping_cart, id: object.id
     assert_response :redirect
   end
+
+  test 'should should render 404 error' do
+    object = products(:cameras)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      get :show, slug: object.slug
+    end
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      get :show, id: object.id
+    end
+  end
 end

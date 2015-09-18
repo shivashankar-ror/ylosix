@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   before_action :extract_commerce_from_url, :set_locale
 
+  rescue_from Exception, with: :render_error
+
   def change_locale
     locale = I18n.default_locale.to_s
     param_locales = permit_locale
@@ -66,13 +68,11 @@ class ApplicationController < ActionController::Base
 
   def extract_locale_from_accept_language_header
     locale = I18n.default_locale
-
     if !request.nil? && !request.env['HTTP_ACCEPT_LANGUAGE'].nil?
       browser = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
       browser = browser.underscore
       locale = browser if Language.locale_valid?(browser)
     end
-
     locale
   end
 
@@ -108,5 +108,11 @@ class ApplicationController < ActionController::Base
 
   def permit_locale
     params.permit(:locale)
+  end
+
+  def render_error(e)
+    if [ActiveRecord::RecordNotFound].include?(e.class)
+      render file: 'public/404.html', formats: :html, status: 404, layout: false && return
+    end
   end
 end
